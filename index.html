@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test_webgl_webgpu</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #engine-container {
+            width: 340px;
+            height: 250px;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello WebGL2 and WebGPU!</h1>
+    <div id="engine-container"></div>
+
+    <script>
+        var slowDown = function() {
+            let count = 0;
+            setInterval(() => {
+                for (var index = 0; index < 100000000; index++) {
+                    count += Math.cos(Math.sin(Math.pow(Math.random(), 3)));
+                }
+            }, 1);    
+        }
+    </script>
+
+    <!-- 使用外部（js中）创建canvas和Module的方式时，“customCanvas”参数必须为true -->
+    <!-- <script type="module">
+        import EngineCore from './lib/EngineCore.js'
+
+        const canvasId = "xr-dxasf-0ddas-main-canvas";
+        const container = document.getElementById("engine-container");
+
+        const Module = {
+            canvas: (() => {
+                const canvas = document.createElement('canvas');
+                canvas.id = canvasId;
+                canvas.style.cssText = `
+                    width: ${container.clientWidth}px;
+                    height: ${container.clientHeight}px;
+                    margin: 0;
+                    padding: 0;
+                `;
+                canvas.addEventListener("webglcontextlost", (e) => { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+                document.getElementById("engine-container").appendChild(canvas);
+                return canvas;
+            })(),
+        };
+
+        EngineCore(Module).then(engine => {
+            engine.startEngine({
+                containerId: "engine-container",
+                width: container.clientWidth,
+                height: container.clientHeight,
+                backend: "webgpu",  // Valid values: webgl2 or webgpu
+                usingOffscreenCanvas: true,
+                canvasId: canvasId,
+                customCanvas: true,
+                style: ""   // A css text, it is only working when "customCanvas" is set to false
+            });
+        });
+    </script> -->
+
+    <!-- 使用WASM内部创建canvas和Module的方式 -->
+    <script type="module">
+        import EngineCore from './lib/EngineCore.js'
+
+        const container = document.getElementById("engine-container");
+
+        EngineCore().then(engine => {
+            engine.startEngine({
+                containerId: "engine-container",
+                width: container.clientWidth,
+                height: container.clientHeight,
+                backend: "webgl2",  // Valid values: webgl2 or webgpu
+                usingOffscreenCanvas: true,
+                canvasId: 'xr-dxasf-0ddas-main-canvas',
+                customCanvas: false,
+                style: ""   // A css text, it is only working when "customCanvas" is set to false
+            });
+        });
+    </script>
+</body>
+</html>
