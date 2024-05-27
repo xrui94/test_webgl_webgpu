@@ -1,6 +1,6 @@
 # Project Description
 
-This is a project to test webgl and webgpu through C++. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu in modern browsers.
+This is a project to test webgl and webgpu through C++. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu in modern browsers.A more complete usage approach that can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine).
 
 - **Features**:
   - Support selecting to get context from canvas or OffscreenCanvas
@@ -9,22 +9,28 @@ This is a project to test webgl and webgpu through C++. Based on OpenGL(GLES3), 
   - ES6 style WebAssembly module
 
 - **Known issues**:
-  - It doesn't work yet when using webgl2 as the backend and directly geting context from canvas (not OffscreenCanvas). You can track this [issue #21954](https://github.com/emscripten-core/emscripten/issues/21954), and I may eventually resolve it.
-  - Not necessarily working in safari.
   - Event monitoring cannot directly control the DragState member variable of the Event class, and can only use the global g-DragState variable in a bad way.
 
 ## 1. API and Usage
 
-There is only one API at present, which requires two parameters:
-
-- backend: String type, valid values: "webgl2" or "webgpu"(default)
-- usingOffscreenCanvas: Boolean type, default value is true
-
 ```js
-engine.startEngine(backend, usingOffscreenCanvas)
+engine.startEngine(startOpts)
 ```
 
-- Example:
+There is only one API, and it only needs a "startupOpts" parameter, which is the object type in JS. It contains eight fields as shown in the following table.You can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine) for more usage methods. to learn more about how to implement webgl and webgpu usage in C++. 
+
+field|type|desc
+:-:|:-|:-
+containerId|string|The ID of a DIV element, which is considered as the parent element and is used to carry canvas
+width|number|The width of DIV element
+height|number|The height of DIV element
+backend|string|The backend of the engine, with valid values of webgl2 or webgpu(default)
+usingOffscreenCanvas|bool|Enable OffscreenCanvas
+canvasId|string|The id of CANVAS element
+customCanvas|bool|Whether to use a custom canvas
+style|string|The style of canvas element
+
+- Example 1:
 
   - **Note**: Need configure **"Cross-Origin-Opener-Policy:same-origin"** and **"Cross-Origin-Embedder-Policy:require-corp"** response headers in your server, check [https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn](https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn)
 
@@ -32,12 +38,63 @@ engine.startEngine(backend, usingOffscreenCanvas)
 <script type="module">
     import EngineCore from './lib/EngineCore.js'
 
+	const canvasId = "xr-dxasf-0ddas-main-canvas";
+	const container = document.getElementById("engine-container");
+
     EngineCore().then(engine => {
-        // engine.startEngine("webgl2", false);        // not working
-        // engine.startEngine("webgl2", true);      // working
-        engine.startEngine("webgpu", false);        // working
-        // engine.startEngine("webgpu", true);      // working
+		engine.startEngine({
+			containerId: "engine-container",
+			width: container.clientWidth,
+			height: container.clientHeight,
+			backend: "webgpu",  // Valid values: webgl2 or webgpu
+			usingOffscreenCanvas: true,
+			canvasId: canvasId,
+			customCanvas: true,
+			style: ""   // A css text, it is only working when "customCanvas" is set to false
+		});
     });
+</script>
+```
+
+- Example 2:
+
+If you want to define the canvas element, and pass it in the wasm initialization function as a property of the "Module" object ( an object with a fixed name in wasm ), you can do it follow this example:
+
+```js
+<script type="module">
+	import EngineCore from './lib/EngineCore.js'
+
+	const canvasId = "xr-dxasf-0ddas-main-canvas";
+	const container = document.getElementById("engine-container");
+
+	const Module = {
+		canvas: (() => {
+			const canvas = document.createElement('canvas');
+			canvas.id = canvasId;
+			canvas.style.cssText = `
+				width: ${container.clientWidth}px;
+				height: ${container.clientHeight}px;
+				margin: 0;
+				padding: 0;
+			`;
+			canvas.addEventListener("webglcontextlost", (e) => { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+			document.getElementById("engine-container").appendChild(canvas);
+			return canvas;
+		})(),
+	};
+
+	EngineCore(Module).then(engine => {
+		engine.startEngine({
+			containerId: "engine-container",
+			width: container.clientWidth,
+			height: container.clientHeight,
+			backend: "webgpu",  // Valid values: webgl2 or webgpu
+			usingOffscreenCanvas: true,
+			canvasId: canvasId,
+			customCanvas: true,
+			style: ""   // A css text, it is only working when "customCanvas" is set to false
+		});
+	});
 </script>
 ```
 
@@ -78,7 +135,7 @@ pmpm i
 
 - Prepare HTTPS service
 
-Use OpenSSL tool to generate certificates for HTTPS protocol services:
+Use OpenSSL tool to generate certificates for HTTPS protocol services.Here 's a simple example:
 
 ```ps
 .\openssl.exe req -nodes -new -x509 -keyout C:\Users\xrui94\Desktop\a\test_server.key -out C:\Users\xrui94\Desktop\a\test_server.cert
@@ -86,7 +143,7 @@ Use OpenSSL tool to generate certificates for HTTPS protocol services:
 
 - Then, use app
 
-After executing the command bellow, you can use the app by opening the url [http://localhost:3050/](http://localhost:3050/) in browser.
+After executing the command bellow, you can use the app by opening the url [http://localhost:3050/](http://localhost:3050/) in browser.**When using multi-threads with "Cross-Origin-Opener-Policy:same-origin" and "Cross-Origin-Embedder-Policy:require-corp" response headers, you must be use the app by opening the url [http://ipv4Address:3051](http://ipv4Address:3051)**
 
 ```ps
 npm start
