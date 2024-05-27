@@ -14,7 +14,7 @@ This is a project to test webgl and webgpu through C++. Based on OpenGL(GLES3), 
 ## 1. API and Usage
 
 ```js
-engine.startEngine(startOpts)
+engine.startEngine(startupOpts)
 ```
 
 There is only one API, and it only needs a "startupOpts" parameter, which is the object type in JS. It contains eight fields as shown in the following table.You can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine) for more usage methods. to learn more about how to implement webgl and webgpu usage in C++. 
