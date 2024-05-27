@@ -17,7 +17,7 @@ This is a project to test webgl and webgpu through C++. Based on OpenGL(GLES3), 
 engine.startEngine(startupOpts)
 ```
 
-There is only one API, and it only needs a "startupOpts" parameter, which is the object type in JS. It contains eight fields as shown in the following table.You can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine) for more usage methods. to learn more about how to implement webgl and webgpu usage in C++. 
+There is only one API, and it only needs a **"startupOpts"** parameter, which is the object type in JS. It contains eight fields as shown in the following table.You can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine) for more usage methods. to learn more about how to implement webgl and webgpu usage in C++. 
 
 field|type|desc
 :-:|:-|:-
@@ -30,18 +30,18 @@ canvasId|string|The id of CANVAS element
 customCanvas|bool|Whether to use a custom canvas
 style|string|The style of canvas element
 
-- Example 1:
+- **Example 1**:
 
   - **Note**: Need configure **"Cross-Origin-Opener-Policy:same-origin"** and **"Cross-Origin-Embedder-Policy:require-corp"** response headers in your server, check [https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn](https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn)
 
 ```js
 <script type="module">
-    import EngineCore from './lib/EngineCore.js'
+	import EngineCore from './lib/EngineCore.js'
 
 	const canvasId = "xr-dxasf-0ddas-main-canvas";
 	const container = document.getElementById("engine-container");
 
-    EngineCore().then(engine => {
+	EngineCore().then(engine => {
 		engine.startEngine({
 			containerId: "engine-container",
 			width: container.clientWidth,
@@ -52,11 +52,11 @@ style|string|The style of canvas element
 			customCanvas: true,
 			style: ""   // A css text, it is only working when "customCanvas" is set to false
 		});
-    });
+	});
 </script>
 ```
 
-- Example 2:
+- **Example 2**:
 
 If you want to define the canvas element, and pass it in the wasm initialization function as a property of the "Module" object ( an object with a fixed name in wasm ), you can do it follow this example:
 
