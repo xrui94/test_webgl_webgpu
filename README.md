@@ -2,6 +2,8 @@
 
 This is a project to test webgl and webgpu through C++. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu in modern browsers.A more complete usage approach that can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine).
 
+![./imgs/test_webgl_webgpu_offscreencanvas.gif](./imgs/test_webgl_webgpu_offscreencanvas.gif)
+
 - **Features:**
   - Support selecting to get context from canvas or OffscreenCanvas
   - Support multi-threaded rendering when using OffscreenCanvas (Rendering in a worker.)
