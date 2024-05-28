@@ -12,7 +12,7 @@
             padding: 0;
         }
 
-        #engine-container {
+        #engine-container-01, #engine-container-02 {
             width: 340px;
             height: 250px;
             margin: 0;
@@ -22,14 +22,20 @@
 </head>
 <body>
     <h1>Hello WebGL2 and WebGPU!</h1>
-    <div id="engine-container"></div>
-
+    <input id="slowCheckbox" type="button" value="Slow things down" onclick="slowDown()">
+    <div style="display: grid; grid-template-columns: 360px 360px; margin-top: 10px;">
+        <span>Rendering in UI Thread</span>
+        <span>Rendering in Worker(using OffscreenCanvas)</span>
+        <div id="engine-container-01"></div>
+        <div id="engine-container-02"></div>
+    </div>
     <script>
-        var slowDown = function() {
+        // This code is from https://doc.babylonjs.com/features/featuresDeepDive/scene/offscreenCanvas
+        const slowDown = function() {
             let count = 0;
             setInterval(() => {
-                for (var index = 0; index < 100000000; index++) {
-                    count += Math.cos(Math.sin(Math.pow(Math.random(), 3)));
+                for (var index = 0; index < 10000000; index++) {
+                    count += Math.cos(Math.sin(Math.random()));
                 }
             }, 1);    
         }
@@ -76,16 +82,29 @@
     <script type="module">
         import EngineCore from './lib/EngineCore.js'
 
-        const container = document.getElementById("engine-container");
-
+        const container1 = document.getElementById("engine-container-01");
         EngineCore().then(engine => {
             engine.startEngine({
-                containerId: "engine-container",
-                width: container.clientWidth,
-                height: container.clientHeight,
-                backend: "webgl2",  // Valid values: webgl2 or webgpu
+                containerId: "engine-container-01",
+                width: container1.clientWidth,
+                height: container1.clientHeight,
+                backend: "webgpu",  // Valid values: webgl2 or webgpu
+                usingOffscreenCanvas: false,
+                canvasId: 'xr-main-canvas-0x000001',
+                customCanvas: false,
+                style: ""   // A css text, it is only working when "customCanvas" is set to false
+            });
+        });
+
+        const container2 = document.getElementById("engine-container-02");
+        EngineCore().then(engine => {
+            engine.startEngine({
+                containerId: "engine-container-02",
+                width: container2.clientWidth,
+                height: container2.clientHeight,
+                backend: "webgpu",  // Valid values: webgl2 or webgpu
                 usingOffscreenCanvas: true,
-                canvasId: 'xr-dxasf-0ddas-main-canvas',
+                canvasId: 'xr-main-canvas-0x000002',
                 customCanvas: false,
                 style: ""   // A css text, it is only working when "customCanvas" is set to false
             });
