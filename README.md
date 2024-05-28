@@ -2,13 +2,13 @@
 
 This is a project to test webgl and webgpu through C++. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu in modern browsers.A more complete usage approach that can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine).
 
-- **Features**:
+- **Features:**
   - Support selecting to get context from canvas or OffscreenCanvas
   - Support multi-threaded rendering when using OffscreenCanvas (Rendering in a worker.)
   - Support selecting WebGL2 or WebGPU as rendering backend
   - ES6 style WebAssembly module
 
-- **Known issues**:
+- **Known issues:**
   - Event monitoring cannot directly control the DragState member variable of the Event class, and can only use the global g-DragState variable in a bad way.
 
 ## 1. API and Usage
@@ -20,7 +20,7 @@ engine.startEngine(startupOpts)
 There is only one API, and it only needs a **"startupOpts"** parameter, which is the object type in JS. It contains eight fields as shown in the following table.You can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine) for more usage methods. to learn more about how to implement webgl and webgpu usage in C++. 
 
 field|type|desc
-:-:|:-|:-
+:-|:-|:-
 containerId|string|The ID of a DIV element, which is considered as the parent element and is used to carry canvas
 width|number|The width of DIV element
 height|number|The height of DIV element
@@ -30,9 +30,11 @@ canvasId|string|The id of CANVAS element
 customCanvas|bool|Whether to use a custom canvas
 style|string|The style of canvas element
 
-- **Example 1**:
+- **Note:**
 
-  - **Note**: Need configure **"Cross-Origin-Opener-Policy:same-origin"** and **"Cross-Origin-Embedder-Policy:require-corp"** response headers in your server, check [https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn](https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn)
+You need to first configure your server as follows: Add **"Cross-Origin-Opener-Policy:same-origin"** and **"Cross-Origin-Embedder-Policy:require-corp"** to response headers in your server, please check [https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn](https://developer.chrome.com/blog/coep-credentialless-origin-trial?hl=zh-cn) for more details.
+
+- **Example 1**:
 
 ```js
 <script type="module">
@@ -133,7 +135,7 @@ ninja
 pmpm i
 ```
 
-- Prepare HTTPS service
+- Second, Prepare HTTPS service
 
 Use OpenSSL tool to generate certificates for HTTPS protocol services.Here 's a simple example:
 
@@ -141,10 +143,18 @@ Use OpenSSL tool to generate certificates for HTTPS protocol services.Here 's a 
 .\openssl.exe req -nodes -new -x509 -keyout C:\Users\xrui94\Desktop\a\test_server.key -out C:\Users\xrui94\Desktop\a\test_server.cert
 ```
 
-- Then, use app
+- Third, use the app
 
-After executing the command bellow, you can use the app by opening the url [http://localhost:3050/](http://localhost:3050/) in browser.**When using multi-threads with "Cross-Origin-Opener-Policy:same-origin" and "Cross-Origin-Embedder-Policy:require-corp" response headers, you must be use the app by opening the url [http://ipv4Address:3051](http://ipv4Address:3051)**
+After executing the command bellow, you can use the app by opening the url [http://localhost:3050/](http://localhost:3050/) in browser. **However**, When using multi-threads with "Cross-Origin-Opener-Policy:same-origin" and "Cross-Origin-Embedder-Policy:require-corp" response headers, you **must** be use the **IPV4 host** to access app by opening the url: [http://ipv4Address:3051](http://YourIPV4Address:3051)
 
 ```ps
 npm start
 ```
+
+## 4. Reference and Thanks
+
+In this project, some code has been referenced from the following projects:
+- webgpu basic rendering example: https://github.com/emscripten-core/emscripten/blob/main/test/webgpu_basic_rendering.cpp
+- A simple wgpu example：https://github.com/eliemichel/LearnWebGPU-Code/tree/step050
+- webgpu cross platform demo：https://github.com/kainino0x/webgpu-cross-platform-demo
+- web端 子线程调用opengl es: https://blog.csdn.net/qq_34754747/article/details/108150004
