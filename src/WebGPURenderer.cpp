@@ -69,11 +69,12 @@ static const char shaderCode[] = R"(
     }
 )";
 
-static const wgpu::Instance g_Instance = wgpuCreateInstance(nullptr);
+// static const wgpu::Instance g_Instance = wgpuCreateInstance(nullptr);
+static wgpu::Instance g_Instance;
 static wgpu::Device g_Device;
 static wgpu::Queue g_Queue;
-wgpu::SwapChain g_SwapChain;  // 渲染帧时，当需要修改画布尺寸，则需要修改，因此不能是static类型的变量
-wgpu::TextureView g_CanvasDepthStencilView;   // 渲染时，需要每帧获取修改，因此不能是static类型的变量
+static wgpu::SwapChain g_SwapChain;  // 渲染帧时，当需要修改画布尺寸，则需要修改，因此不能是const类型的变量
+static wgpu::TextureView g_CanvasDepthStencilView;   // 渲染时，需要每帧获取修改，因此不能是const类型的变量
 static wgpu::RenderPipeline g_Pipeline;
 
 static int testsCompleted = 0;
@@ -354,8 +355,10 @@ void run(const std::string& canvasId, uint32_t width, uint32_t height) {
 
 void* initWebGPURenderer(void *args)
 {
+    g_Instance = wgpu::CreateInstance(nullptr);
+
+    //
     auto initArgs = static_cast<InitArgs*>(args);
-   
     // initArgs不能按引用传递，否则，无法获取到值
     GetDevice([initArgs](wgpu::Device dev) {
         g_Device = dev;
