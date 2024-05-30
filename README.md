@@ -1,11 +1,11 @@
 # Project Description
-This is a project that uses C++ to test the use of webgl and webgpu in OffscreenCanvas. So, it is also an webgl/webgpu offscreencanvas demo. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu through OffscreenCanvas in modern browsers.A more complete usage approach that can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine).
+This is a project that uses C++ to test the use of webgl and webgpu in OffscreenCanvas. So, it is also an webgl/webgpu offscreencanvas demo. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu through OffscreenCanvas in modern browsers.A more complete usage approach that can track this project: [https://github.com/xrui94/iEngine](https://github.com/xrui94/iEngine).
 
 ![./imgs/test_webgl_webgpu_offscreencanvas.gif](./imgs/test_webgl_webgpu_offscreencanvas.gif)
 
 - **Features:**
   - Support selecting to get context from canvas or OffscreenCanvas
-  - Support multi-threaded rendering when using OffscreenCanvas (Rendering in a worker.)
+  - Support multi-threaded rendering when using OffscreenCanvas (Rendering in a worker. As shown in the above figure, in some cases, the time-consuming task of the main thread (UI thread) can cause rendering lag issues.)
   - Support selecting WebGL2 or WebGPU as rendering backend
   - ES6 style WebAssembly module
 
@@ -18,7 +18,7 @@ This is a project that uses C++ to test the use of webgl and webgpu in Offscreen
 engine.startEngine(startupOpts)
 ```
 
-There is only one API, and it only needs a **"startupOpts"** parameter, which is the object type in JS. It contains eight fields as shown in the following table.You can track this project: [https://github.com/xrui94/TinyEngine](https://github.com/xrui94/TinyEngine) for more usage methods. to learn more about how to implement webgl and webgpu usage in C++. 
+There is only one API, and it only needs a **"startupOpts"** parameter, which is the object type in JS. It contains eight fields as shown in the following table.You can track this project: [https://github.com/xrui94/iEngine](https://github.com/xrui94/iEngine) for more usage methods. to learn more about how to implement webgl and webgpu usage in C++. 
 
 field|type|desc
 :-|:-|:-
@@ -52,7 +52,7 @@ You need to first configure your server as follows: Add **"Cross-Origin-Opener-P
 			backend: "webgpu",  // Valid values: webgl2 or webgpu
 			usingOffscreenCanvas: true,
 			canvasId: canvasId,
-			customCanvas: true,
+			customCanvas: false,
 			style: ""   // A css text, it is only working when "customCanvas" is set to false
 		});
 	});
@@ -136,9 +136,9 @@ ninja
 pmpm i
 ```
 
-- Second, Prepare HTTPS service
+- Second, Prepare HTTPS service **( optional )**
 
-Use OpenSSL tool to generate certificates for HTTPS protocol services.Here 's a simple example:
+**If you do not need to access the application through an IPV4 address, you can skip this step.** Use OpenSSL tool to generate certificates for HTTPS protocol services.Here 's a simple example:
 
 ```ps
 .\openssl.exe req -nodes -new -x509 -keyout C:\Users\xrui94\Desktop\a\test_server.key -out C:\Users\xrui94\Desktop\a\test_server.cert
@@ -146,7 +146,7 @@ Use OpenSSL tool to generate certificates for HTTPS protocol services.Here 's a 
 
 - Third, use the app
 
-After executing the command bellow, you can use the app by opening the url [http://localhost:3050/](http://localhost:3050/) in browser. **However**, When using multi-threads with "Cross-Origin-Opener-Policy:same-origin" and "Cross-Origin-Embedder-Policy:require-corp" response headers, you **must** be use the **IPV4 host** to access app by opening the url: [http://ipv4Address:3051](http://YourIPV4Address:3051)
+After executing the command bellow, you can use the app by opening the url [http://localhost:3050/](http://localhost:3050/) in browser. **However**, When using multi-threads with "Cross-Origin-Opener-Policy:same-origin" and "Cross-Origin-Embedder-Policy:require-corp" response headers, you **must** be use the **IPV4 host** to access app by opening the url: [http://YourIPV4Address:3051](http://YourIPV4Address:3051)
 
 ```ps
 npm start
@@ -158,4 +158,4 @@ In this project, some code has been referenced from the following projects:
 - webgpu basic rendering example: https://github.com/emscripten-core/emscripten/blob/main/test/webgpu_basic_rendering.cpp
 - A simple wgpu example：https://github.com/eliemichel/LearnWebGPU-Code/tree/step050
 - webgpu cross platform demo：https://github.com/kainino0x/webgpu-cross-platform-demo
-- web端 子线程调用opengl es: https://blog.csdn.net/qq_34754747/article/details/108150004
+- web端子线程调用opengl es: https://blog.csdn.net/qq_34754747/article/details/108150004
