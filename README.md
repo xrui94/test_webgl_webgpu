@@ -133,7 +133,7 @@ ninja
 - First, Install dependencies
 
 ```ps
-pmpm i
+pnpm i
 ```
 
 - Second, Prepare HTTPS service **( optional )**
