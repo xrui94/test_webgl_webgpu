@@ -1,5 +1,5 @@
 # Project Description
-This is a project that uses C++ to test the use of webgl and webgpu in OffscreenCanvas. So, it is also an webgl/webgpu offscreencanvas demo. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu through OffscreenCanvas in modern browsers.A more complete usage approach that can track this project: [https://github.com/xrui94/iEngine](https://github.com/xrui94/iEngine).
+This is a project that uses C++ to test the use of webgl and webgpu in OffscreenCanvas. So, it is also an webgl/webgpu offscreencanvas demo. Based on OpenGL(GLES3), WebGPU(webgpu.h implementation：webgpu_cpp.h) from Emscripten, it is compiled into a WebAssembly module from C++ code, and ultimately uses webgl2 and webgpu through OffscreenCanvas in modern browsers. A more complete usage approach that can track this project: [https://github.com/xrui94/iEngine](https://github.com/xrui94/iEngine).
 
 ![./imgs/test_webgl_webgpu_offscreencanvas.gif](./imgs/test_webgl_webgpu_offscreencanvas.gif)
 
